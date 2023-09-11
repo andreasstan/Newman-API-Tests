@@ -1,4 +1,4 @@
-name: Newman API Tests
+name: Newman-API-Tests
 on: 
   workflow_dispatch:
 jobs: 
