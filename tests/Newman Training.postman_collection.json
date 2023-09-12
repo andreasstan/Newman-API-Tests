@@ -1,0 +1,230 @@
+{
+	"info": {
+		"_postman_id": "4bbe20ff-7fd8-459b-918a-457b3210dcc7",
+		"name": "Newman Training",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24763658"
+	},
+	"item": [
+		{
+			"name": "BB ONE Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"if (jsonData.id_token) {",
+							"    pm.collectionVariables.set(\"TOKEN\", jsonData.id_token);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"redirect_uri\": \"localhost\",\n    \"scope\": \"openid email profile offline_access refresh_token\",\n    \"response_type\": \"id_token token code\",\n    \"client_id\": \"1\",\n    \"user_id\": \"iot-admin\",\n    \"user_secret\": \"iotadmin\",\n    \"cookies\": \"1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://devapi-bbone.bluebird.id/token/auth",
+					"protocol": "https",
+					"host": [
+						"devapi-bbone",
+						"bluebird",
+						"id"
+					],
+					"path": [
+						"token",
+						"auth"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "BB ONE Login",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"redirect_uri\": \"localhost\",\n    \"scope\": \"openid email profile offline_access refresh_token\",\n    \"response_type\": \"id_token token code\",\n    \"client_id\": \"1\",\n    \"user_id\": \"iot-admin\",\n    \"user_secret\": \"iotadmin\",\n    \"cookies\": \"1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://devapi-bbone.bluebird.id/token/auth",
+							"protocol": "https",
+							"host": [
+								"devapi-bbone",
+								"bluebird",
+								"id"
+							],
+							"path": [
+								"token",
+								"auth"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "content-encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						},
+						{
+							"key": "grpc-metadata-content-type",
+							"value": "application/grpc"
+						},
+						{
+							"key": "grpc-metadata-trailer",
+							"value": "Grpc-Status"
+						},
+						{
+							"key": "grpc-metadata-trailer",
+							"value": "Grpc-Message"
+						},
+						{
+							"key": "grpc-metadata-trailer",
+							"value": "Grpc-Status-Details-Bin"
+						},
+						{
+							"key": "vary",
+							"value": "Accept-Encoding"
+						},
+						{
+							"key": "date",
+							"value": "Mon, 11 Sep 2023 07:58:37 GMT"
+						},
+						{
+							"key": "Via",
+							"value": "1.1 google"
+						},
+						{
+							"key": "Alt-Svc",
+							"value": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "deviceType",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response time is within acceptable range\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate the response body is an array\", function () {\r",
+							"    pm.expect(pm.response.json()).to.be.an('array');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Each object in the array has the required fields - id and name\", function () {\r",
+							"    pm.response.json().forEach(function (object) {\r",
+							"        pm.expect(object).to.have.property('id').that.is.a('number');\r",
+							"        pm.expect(object).to.have.property('name').that.is.a('string');\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate that the id is a non-negative integer\", function () {\r",
+							"    pm.response.json().forEach(function (deviceType) {\r",
+							"        pm.expect(deviceType.id).to.be.a('number').and.to.be.at.least(0);\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate that the name is a non-empty string\", function () {\r",
+							"    pm.response.json().forEach(function (deviceType) {\r",
+							"        pm.expect(deviceType.name).to.be.a('string').and.to.have.lengthOf.at.least(1);\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/v1/device-type",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"v1",
+						"device-type"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{TOKEN}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "TOKEN",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
